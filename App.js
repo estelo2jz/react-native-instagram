@@ -1,21 +1,57 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import * as firebase from 'firebase';
+import { NavigationContainer } from '@react-navigation/native'; 
+import { createStackNavigator } from '@react-navigation/stack';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+import LandingScreen from './components/auth/Landing';
+import RegisterScreen from './components/auth/Register';
+import LoginScreen from './components/auth/Login';
+// import { firebaseConfig } from './firebase';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBJPw7enMgK3vKefXLMNhHudttz-PZFfGY",
+  authDomain: "instagram-native-832ff.firebaseapp.com",
+  projectId: "instagram-native-832ff",
+  storageBucket: "instagram-native-832ff.appspot.com",
+  messagingSenderId: "893600502254",
+  appId: "1:893600502254:web:5605d59a9a6b8ed4dbfeff",
+  measurementId: "G-4Q5H9PVQRK"
+};
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig);
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const Stack = createStackNavigator();
+
+export default class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false,
+    }
+  }
+
+  render () {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Landing">
+          <Stack.Screen 
+            name="Landing" 
+            component={LandingScreen} 
+            options={{ headerShown: false }} 
+          />
+          <Stack.Screen
+            name="Register"
+            component={RegisterScreen}
+          />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
+}
