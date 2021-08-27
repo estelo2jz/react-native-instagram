@@ -7,7 +7,16 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LandingScreen from './components/auth/Landing';
 import RegisterScreen from './components/auth/Register';
 import LoginScreen from './components/auth/Login';
+import MainScreen from './components/Main';
+import AddScreen from './components/main/Add';
 // import { firebaseConfig } from './firebase';
+
+import {Provider} from 'react-redux';
+import {createStore, applyMiddleware} from 'redux';
+import rootReducer from './redux/reducers';
+// thunk will allow us to use dispatch function here
+import thunk from 'redux-thunk';
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const firebaseConfig = {
   apiKey: "AIzaSyBJPw7enMgK3vKefXLMNhHudttz-PZFfGY",
@@ -84,9 +93,21 @@ export default class App extends Component {
     }
 
     return (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <Text>User is logged in</Text>
-      </View>
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Main">
+            <Stack.Screen
+              name="Main"
+              component={MainScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Add"
+              component={AddScreen}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
     )
   }
 }
